@@ -1,0 +1,14 @@
+handler:
+  type: xlsx
+  xlsxName: card
+  sheetName: attribute
+  format: msgpack
+  startRow: 5
+
+fields:
+- column: id
+  type: number
+  primary: true
+
+- column: name
+  type: string

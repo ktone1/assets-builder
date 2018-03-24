@@ -1,0 +1,20 @@
+{
+  "name": "assets-builder",
+  "bin" : {
+    "asset-builder" : "./index.js"
+  },
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "repository": "https://github.com/ktone1/assets-builder.git",
+  "author": "kento <kento@kt-one.jp>",
+  "license": "MIT",
+  "peerDependencies": {
+    "msgpack-lite": "^0.1.26"
+  },
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "js-yaml": "^3.11.0",
+    "msgpack-lite": "^0.1.26",
+    "xlsx": "^0.12.6"
+  }
+}

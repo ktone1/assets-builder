@@ -1,0 +1,53 @@
+// auto generated from <%= schema.schemaPath %>
+// @flow
+import msgpack from 'msgpack-lite';
+import Resolver from './resolver';
+<% schema.fields.forEach(function (field) { -%>
+<% if (field.type == 'foreignkey') { -%>
+import type {<%= field.relation.className %>} from './<%= field.relation.className %>';
+import <%= field.relation.className %>Resolver from './<%= field.relation.className %>';
+<% } -%>
+<% }); -%>
+
+
+type <%= schema.className %> = {
+<% schema.fields.forEach(function(field) { -%>
+<% if (field.type == 'foreignkey') { -%>
+    <%= field.column %>: <%= field.relation.className %>;
+<% } else if (field.type == 'date') { -%>
+    <%= field.column %>: Date;
+<% } else { -%>
+    <%= field.column %>: <%= field.type %>;
+<% } -%>
+<% }); -%>
+};
+
+
+<% var primaryIndex = schema.fields.findIndex((field) => field.isPrimary()); -%>
+class _<%= schema.className %>Resolver extends Resolver<<%= schema.primary.type %>, <%= schema.className %>> {
+    async _fetch(): Promise<Map<<%= schema.primary.type %>, <%= schema.className %>> {
+        const data = await fetch('<%= assetsEndpoint %>' + '<%= schema.className %>.dat').then(response => {
+            return response.arrayBuffer();
+        }).then(arrayBuffer => {
+            return msgpack.decode(new Uint8Array(arrayBuffer));
+        });
+        let map = new Map();
+        for (let i = 0; i < data.length; i++) {
+            map.set(data[i][<%= primaryIndex %>], {
+<% for (var i = 0; i < schema.fields.length; i++) { -%>
+<% var field = schema.fields[i]; -%>
+<% if (field.type == 'foreignkey') { -%>
+                <%= field.column %>: await <%= field.relation.className %>Resolver.get(data[i][<%= i %>]),
+<% } else { -%>
+                <%= field.column %>: data[i][<%= i %>],
+<% } -%>
+<% } -%>
+            });
+        }
+        return map;
+    }
+}
+
+
+const <%= schema.className %>Resolver = new _<%= schema.className %>Resolver();
+export default <%= schema.className %>Resolver;

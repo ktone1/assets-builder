@@ -1,0 +1,5 @@
+assetsEndpoint: 'http://example.com/'
+outputAssetsDir: 'sample/output/assets'
+outputSourceDir: 'sample/output/source'
+schemaBaseDir: 'sample/schemas'
+xlsxBaseDir: 'sample/xlsx'

@@ -1,0 +1,20 @@
+handler:
+  type: xlsx
+  xlsxName: card
+  sheetName: master
+  format: msgpack
+  startRow: 5
+
+fields:
+- column: id
+  type: number
+  primary: true
+
+- column: name
+  type: string
+
+- column: attribute
+  type: foreignkey
+  relation:
+    key: name
+    schemaPath: card/attribute.yaml
